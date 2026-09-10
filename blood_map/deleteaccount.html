@@ -22,8 +22,8 @@
         
         .form-group { margin-bottom: 18px; }
         label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--dark-color); font-size: 0.9rem; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.3s; }
-        input:focus, select:focus { border-color: var(--primary-color); }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.3s; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-color); }
         
         .btn-submit { width: 100%; background: var(--primary-color); color: white; padding: 13px; font-size: 1rem; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s; }
         .btn-submit:hover { background: #b71c1c; }
@@ -47,21 +47,21 @@
             </ul>
         </div>
 
-        <!-- Submission Form via Formspree or Email Link -->
-        <form action="https://formspree.io/f/contact@smartdevelopment.bd" method="POST">
+        <!-- Account Deletion Form -->
+        <form id="deletionForm">
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="Full Name" placeholder="Enter your registered name" required>
+                <input type="text" id="name" placeholder="Enter your registered name" required>
             </div>
 
             <div class="form-group">
                 <label for="phone">Registered Phone Number</label>
-                <input type="tel" id="phone" name="Phone Number" placeholder="e.g. 01700000000" required>
+                <input type="tel" id="phone" placeholder="e.g. 01700000000" required>
             </div>
 
             <div class="form-group">
                 <label for="blood_group">Blood Group</label>
-                <select id="blood_group" name="Blood Group" required>
+                <select id="blood_group" required>
                     <option value="" disabled selected>Select your blood group</option>
                     <option value="A+">A+</option>
                     <option value="A-">A-</option>
@@ -75,15 +75,54 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Account Password (for verification)</label>
-                <input type="password" id="password" name="Verification Password" placeholder="Enter your account password" required>
+                <label for="reason">Reason for Deletion (Optional)</label>
+                <textarea id="reason" rows="3" placeholder="Tell us why you are deleting your account"></textarea>
             </div>
 
-            <button type="submit" class="btn-submit">Submit Deletion Request</button>
+            <button type="submit" class="btn-submit">Submit Deletion Request via Email</button>
         </form>
 
         <a href="index.html" class="back-link">← Back to Home Page</a>
     </div>
+
+    <!-- JavaScript to collect details and form a plain-text email -->
+    <script>
+        document.getElementById('deletionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect values from the input fields
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const bloodGroup = document.getElementById('blood_group').value;
+            const reason = document.getElementById('reason').value || 'Not provided';
+
+            // Target Email Address
+            const targetEmail = "contact@smartdevelopment.bd";
+            const subject = encodeURIComponent("Account Deletion Request - Blood Map");
+
+            // Format the details as plain text
+            const bodyText = `Hello Blood Map Support Team,
+
+I would like to request the permanent deletion of my Blood Map account and all associated personal data.
+
+Here are my account details:
+----------------------------------------
+Full Name: ${name}
+Phone Number: ${phone}
+Blood Group: ${bloodGroup}
+Reason for Deletion: ${reason}
+----------------------------------------
+
+Please process my deletion request as soon as possible.
+
+Thank you.`;
+
+            const encodedBody = encodeURIComponent(bodyText);
+
+            // Open user's default email app with pre-filled text
+            window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${encodedBody}`;
+        });
+    </script>
 
 </body>
 </html>
