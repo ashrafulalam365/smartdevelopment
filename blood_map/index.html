@@ -1,149 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Map - Find & Donate Blood Nearby</title>
-    <style>
-        :root {
-            --primary-color: #d32f2f;
-            --secondary-color: #c62828;
-            --dark-color: #2c3e50;
-            --light-color: #f9f9f9;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: var(--light-color); }
-        
-        /* Navbar Header */
-        header { background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
-        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
-        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  <base href="/blood_map/">
 
-        .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--dark-color); font-weight: 600; font-size: 0.9rem; transition: color 0.3s; white-space: nowrap; }
-        .nav-links a:hover { color: var(--primary-color); }
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Flutter project for blood map app">
+  <meta name="google-signin-client_id" content="256419588950-sbmn64brcr0beiu4kighd922eg8vr22a.apps.googleusercontent.com">
 
-        .menu-toggle { display: none; font-size: 1.6rem; background: none; border: none; color: var(--dark-color); cursor: pointer; padding: 5px; }
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="bloodmap">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px 0; border-top: 1px solid #eee; }
-            .nav-links.active { display: flex; }
-            .nav-links li { width: 100%; text-align: center; }
-            .nav-links a { display: block; padding: 12px 20px; border-bottom: 1px solid #f5f5f5; }
-            .nav-links li:last-child a { border-bottom: none; }
-        }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
 
-        /* Hero Section */
-        .hero { background: linear-gradient(135deg, #d32f2f 0%, #8e0000 100%); color: white; text-align: center; padding: 60px 20px; }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 700; }
-        .hero p { font-size: 1rem; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.95; }
-        .btn-download { background: #ffffff; color: var(--primary-color); padding: 14px 28px; font-weight: 700; border-radius: 30px; text-decoration: none; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s; }
-        .btn-download:hover { transform: translateY(-2px); }
-
-        .notice-banner { background: #fff3f3; border-left: 4px solid var(--primary-color); max-width: 1100px; margin: 30px auto -10px auto; padding: 15px 20px; border-radius: 6px; font-size: 0.9rem; }
-
-        /* Features Section */
-        .features { max-width: 1100px; margin: 50px auto; padding: 0 20px; }
-        .features h2 { text-align: center; color: var(--dark-color); margin-bottom: 30px; font-size: 1.8rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); text-align: center; }
-        .card h3 { color: var(--primary-color); margin-bottom: 10px; font-size: 1.2rem; }
-
-        /* Legal Section */
-        .legal-section { background: #fff; padding: 40px 20px; text-align: center; border-top: 1px solid #eee; }
-        .legal-links { display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .legal-btn { text-decoration: none; padding: 10px 20px; border: 2px solid var(--primary-color); color: var(--primary-color); border-radius: 8px; font-weight: 600; font-size: 0.88rem; transition: all 0.3s; }
-        .legal-btn:hover { background: var(--primary-color); color: #fff; }
-        .legal-btn.danger { border-color: #b71c1c; color: #b71c1c; }
-        .legal-btn.danger:hover { background: #b71c1c; color: #fff; }
-
-        /* Footer */
-        footer { background: var(--dark-color); color: #fff; padding: 25px 20px; text-align: center; font-size: 0.85rem; }
-        footer a { color: #ff8a80; text-decoration: none; }
-    </style>
+  <title>bloodmap</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-
-    <!-- Header Navigation Bar -->
-    <header>
-        <div class="nav-container">
-            <a href="#" class="logo">🩸 Blood Map</a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">☰</button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#features">Features</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="termscondition.html">Terms & Conditions</a></li>
-                <!-- Header Delete Account Link -->
-                <li><a href="deleteaccount.html" style="color: #d32f2f;">Delete Account</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Blood Map - Connect & Save Lives</h1>
-        <p>A voluntary blood donation platform connecting donors and recipients based on location. Search nearby donors by Division, District, and Upazila easily.</p>
-        <a href="#" class="btn-download">Download App on Play Store</a>
-    </section>
-
-    <!-- Emergency Notice -->
-    <div class="notice-banner">
-        <strong>Important Notice:</strong> Blood Map strictly facilitates voluntary and unpaid blood donations. In case of critical medical emergencies, rely on professional emergency services.
-    </div>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <h2>Key Platform Features</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>📍 Location Based Search</h3>
-                <p>Filter voluntary donors directly by Division, District, and Upazila for fast local response.</p>
-            </div>
-            <div class="card">
-                <h3>📞 Direct Communication</h3>
-                <p>Contact potential donors via direct phone call or secure in-app messaging when urgent.</p>
-            </div>
-            <div class="card">
-                <h3>🔒 Data Protection</h3>
-                <p>Passwords encrypted using advanced SHA-256 Hashing with Salt to keep your account safe.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Legal & Account Settings Section -->
-    <section class="legal-section">
-        <h2>Legal & Account Settings</h2>
-        <p>Review our guidelines or request account data deletion:</p>
-        <div class="legal-links">
-            <a href="privacy.html" class="legal-btn">Privacy Policy</a>
-            <a href="termscondition.html" class="legal-btn">Terms & Conditions</a>
-            <!-- Footer/Body Delete Account Button -->
-            <a href="deleteaccount.html" class="legal-btn danger">Delete Account Request</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Blood Map Team. All rights reserved.</p>
-        <p style="margin-top: 6px;">Support Contact: <a href="mailto:contact@smartdevelopment.bd">contact@smartdevelopment.bd</a></p>
-    </footer>
-
-    <!-- Mobile Menu Script -->
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-    </script>
-
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
